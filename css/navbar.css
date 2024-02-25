@@ -1,0 +1,22 @@
+.navbar {
+    background-image: linear-gradient(to right, #091727, #474c51);
+    background: -webkit-linear-gradient(left, #01101f, #368ae5); 
+    padding: 10px 20px; 
+    padding-bottom: 30px; 
+    margin-left: auto; 
+    
+}
+
+.navbar h1 {
+    margin: 0; 
+    color: #fff; 
+    text-align: left;
+    
+}
+
+.cont1 {
+    width: 100%;
+    max-width: 100%;
+    padding-bottom: 5%;
+    /* position: fixed; */
+}

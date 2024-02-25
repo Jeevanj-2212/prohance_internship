@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./css/signup.css">
+    <link rel="stylesheet" href="./css/navbar.css">
+    
+    <title>Signup</title>
+</head>
+<body>
+    <div class="cont1">
+        <header class="navbar">
+        
+          <h1>ProHance</h1> 
+    
+        </header>
+  </div>
+    
+    
+    
+    
+    <div class="container">
+        <img src="./images/signup.png" alt="Signup Logo" width="150" height="150"> 
+        <h1>Sign Up</h1>
+        <form id="signup-form">
+            <input type="text" id="name" name="name" placeholder="Name" required> <!-- New input for Name -->
+            <input type="email" id="email" name="email" placeholder="Email" required>
+            <input type="password" id="pwd" name="password" minlength="8" placeholder="Password" required>
+            <select id="role" name="role" required>
+                <option value="user">User</option>
+                <option value="admin">Admin</option>
+            </select>
+            <button type="submit">Submit</button>
+            <div>Already have an account? <a href="login.html">Login</a></div>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById("signup-form").addEventListener("submit", function(event) {
+            event.preventDefault();
+
+            const name = document.getElementById("name").value;
+            const email = document.getElementById("email").value;
+            const password = document.getElementById("pwd").value;
+            const role = document.getElementById("role").value;
+
+            fetch('http://localhost:3000/signup', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ name, email, password, role }), 
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                alert(data.message);
+                
+                window.location.href = "login.html";
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert("An error occurred while signing up. Please try again later.");
+            });
+        });
+    </script>
+</body>
+</html>

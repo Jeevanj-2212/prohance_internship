@@ -1,0 +1,90 @@
+.container {
+    width: 80%;
+    margin: 0 auto;
+    padding-top: 70px; 
+    position: relative;
+}
+
+.user-list-container {
+    margin-top: 20px;
+}
+
+#user-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+#user-table th, #user-table td {
+    border: 1px solid #030633;
+    padding: 8px;
+    text-align: left;
+}
+
+#user-table th {
+    background-color: #6dadf1;
+}
+
+.actions {
+    display: flex;
+    justify-content: center;
+}
+
+.edit-button {
+    margin-right: 5px; 
+}
+
+#createUserButton {
+    padding: 5px 10px;
+    background: -webkit-linear-gradient(left, #01101f, #368ae5); 
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    margin-bottom: 10px; 
+}
+
+#createUserButton:hover {
+    background: -webkit-linear-gradient(left, #01101f, green);
+}
+
+button[type="submit"] {
+    background: -webkit-linear-gradient(left, #01101f, #368ae5); 
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+button[type="submit"]:hover {
+    background: -webkit-linear-gradient(left, #01101f, green); /* Darker green gradient color on hover */
+}
+
+.custom-button {
+    background: -webkit-linear-gradient(left, #01101f, #368ae5);
+    color: white; /* Change text color if needed */
+}
+
+.custom-button:hover {
+    background: -webkit-linear-gradient(left, #01101f, green);
+}
+
+.custom-button2 {
+    background: -webkit-linear-gradient(left, #01101f, #368ae5);
+    color: white; /* Change text color if needed */
+    margin-left: 20%;
+}
+
+.custom-button2:hover {
+    background: -webkit-linear-gradient(left, #01101f, red);
+}
+
+/* Responsive styles */
+@media screen and (max-width: 768px) {
+    .container {
+        width: 90%; /* Adjusted container width for smaller screens */
+        padding-top: 50px; /* Adjusted padding for smaller screens */
+    }
+
+    .custom-button2 {
+        margin-left: 0; /* Reset margin for custom-button2 on smaller screens */
+    }
+}

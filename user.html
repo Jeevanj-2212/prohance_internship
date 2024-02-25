@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User List</title>
+    <link rel="stylesheet" href="./css/user.css">
+    <link rel="stylesheet" href="./css/navbar.css">
+</head>
+<body>
+    <div class="cont1" style="position: fixed;">
+        <header class="navbar">
+
+          <h1>ProHance</h1> <!-- Company name -->
+
+         </header>
+    
+
+
+    </div>
+    <div class="container">
+        <h1>Hello,User</h1>
+       
+        <table id="user-list">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- User data will be populated here -->
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        // Fetch list of users with role 'user' from the server
+        fetch('http://localhost:3000/users') // Fetch from the /users endpoint
+            .then(response => response.json())
+            .then(users => {
+                const userList = document.getElementById('user-list').getElementsByTagName('tbody')[0];
+                // Clear existing table rows
+                userList.innerHTML = '';
+                // Populate table with user emails and names
+                users.forEach(user => {
+                    const row = userList.insertRow();
+                    const cell1 = row.insertCell(0);
+                    const cell2 = row.insertCell(1);
+                    cell1.textContent = user.name;
+                    cell2.textContent = user.email;
+                });
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert("An error occurred while fetching user data. Please try again later.");
+            });
+    </script>
+   
+  
+</body>
+</html>

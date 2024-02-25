@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel</title>
+    <link rel="stylesheet" href="./css/admin.css">
+    <link rel="stylesheet" href="./css/navbar.css">
+    <!-- SweetAlert2 CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10/dist/sweetalert2.min.css">
+
+</head>
+<body>
+    <div class="cont1" style="position: fixed;">
+                <header class="navbar">
+        
+          <h1>ProHance</h1> <!-- Company name -->
+ 
+        </header>
+        
+ </div>
+    <div class="container">
+        <h1>Hello,Admin</h1>
+        
+         
+      
+        <button id="createUserButton">Create User</button>
+        <div id="createUserForm" style="display: none;">
+            <form id="createForm">
+                <input type="text" id="name" name="name" placeholder="Name" required>
+                <input type="email" id="email" name="email" placeholder="Email" required>
+                <input type="password" id="password" name="password" minlength="8" placeholder="Password" required>
+                <select id="role" name="role" required>
+                    <option value="user">User</option>
+                    <option value="admin">Admin</option>
+                </select>
+                <button type="submit">Create User</button>
+            </form>
+        </div>
+
+        <!-- Edit User Form -->
+        <div id="editUserForm" style="display: none;">
+            <form id="editForm">
+                <input type="hidden" id="editUserId" name="userId">
+                <input type="text" id="editName" name="name" placeholder="Name" required>
+                <input type="email" id="editEmail" name="email" placeholder="Email" required>
+                <input type="password" id="editPassword" name="password" minlength="8" placeholder="Password" required>
+                <select id="editRole" name="role" required>
+                    <option value="user">User</option>
+                    <option value="admin">Admin</option>
+                </select>
+                <button type="submit">Update User</button>
+            </form>
+        </div>
+
+        <!-- User List Section -->
+        <div class="user-list-container">
+            <h2>User List</h2>
+            <table id="user-table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Role</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="user-list"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- SweetAlert2 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Function to handle delete user action
+            function deleteUser(name, email) {
+                Swal.fire({
+                    title: `Are you sure you want to delete user "${name}" (${email})?`,
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, delete it!',
+                    cancelButtonText: 'No, cancel'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        fetch(`http://localhost:3000/users/${encodeURIComponent(email)}`, {
+                            method: 'DELETE'
+                        })
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('Network response was not ok');
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            // Remove the deleted user from the UI
+                            const userRow = document.getElementById(email + '-row');
+                            if (userRow) {
+                                userRow.remove();
+                            }
+                            Swal.fire(
+                                'Deleted!',
+                                'User has been deleted successfully.',
+                                'success'
+                            );
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            Swal.fire(
+                                'Error!',
+                                'An error occurred while deleting user. Please try again later.',
+                                'error'
+                            );
+                        });
+                    }
+                });
+            }
+
+            // Function to handle edit user action
+            function editUser(user) {
+                // Populate edit form with user's current information
+                document.getElementById('editUserId').value = user.email; // Correctly set the user ID
+                document.getElementById('editName').value = user.name;
+                document.getElementById('editEmail').value = user.email;
+                document.getElementById('editRole').value = user.role;
+
+                // Display the edit user form
+                document.getElementById('editUserForm').style.display = 'block';
+            }
+
+            // Fetch list of users from the server and populate the user list
+            fetch('http://localhost:3000/users')
+                .then(response => response.json())
+                .then(users => {
+                    const userList = document.getElementById('user-list');
+                    userList.innerHTML = ''; // Clear existing list items
+                    users.forEach(user => {
+                        const row = document.createElement('tr');
+                        row.id = user.email + '-row';
+
+                        const nameCell = document.createElement('td');
+                        nameCell.textContent = user.name;
+                        row.appendChild(nameCell);
+
+                        const emailCell = document.createElement('td');
+                        emailCell.textContent = user.email;
+                        row.appendChild(emailCell);
+
+                        const roleCell = document.createElement('td');
+                        roleCell.textContent = user.role;
+                        row.appendChild(roleCell);
+
+                        const actionCell = document.createElement('td');
+
+                        const editButton = document.createElement('button');
+                        editButton.textContent = 'Edit';
+                        editButton.classList.add('custom-button'); 
+                        editButton.addEventListener('click', () => editUser(user));
+                        actionCell.appendChild(editButton);
+                        actionCell.appendChild(document.createTextNode('\u00A0'));
+
+                        const deleteButton = document.createElement('button');
+                        deleteButton.textContent = 'Delete';
+                        deleteButton.classList.add('custom-button2');
+                        deleteButton.addEventListener('click', () => deleteUser(user.name, user.email));
+                        actionCell.appendChild(deleteButton);
+
+                        row.appendChild(actionCell);
+
+                        userList.appendChild(row);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert("An error occurred while fetching user data. Please try again later.");
+                });
+
+            // Event listener for the "Create User" button
+            document.getElementById('createUserButton').addEventListener('click', function () {
+                document.getElementById('createUserForm').style.display = 'block'; // Display the create user form
+            });
+
+            // Event listener for the create user form submission
+            document.getElementById('createForm').addEventListener('submit', function (event) {
+                event.preventDefault();
+                // Your create user form submission code here...
+            });
+
+            // Event listener for the edit form submission
+            document.getElementById('editForm').addEventListener('submit', function (event) {
+                event.preventDefault();
+                const formData = new FormData(this);
+                const userId = formData.get('userId'); // Retrieve user ID from the form data
+
+                fetch(`http://localhost:3000/users/${encodeURIComponent(userId)}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        name: formData.get('name'),
+                        email: formData.get('email'),
+                        password: formData.get('password'),
+                        role: formData.get('role')
+                    })
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    // Update the user in the UI
+                    const userRow = document.getElementById(data.email + '-row');
+                    if (userRow) {
+                        const cells = userRow.getElementsByTagName('td');
+                        cells[0].textContent = data.name;
+                        cells[1].textContent = data.email;
+                        cells[2].textContent = data.role;
+                    }
+                    Swal.fire(
+                        'Updated!',
+                        'User has been updated successfully.',
+                        'success'
+                    ).then(() => {
+                        // Reload the page
+                        window.location.reload();
+                    });
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    Swal.fire(
+                        'Error!',
+                        'An error occurred while updating user. Please try again later.',
+                        'error'
+                    );
+                });
+
+                // Hide the edit user form after submission
+                document.getElementById('editUserForm').style.display = 'none';
+            });
+        });
+    </script>
+    
+    <script src="admin.js"></script>
+</body>
+</html>
