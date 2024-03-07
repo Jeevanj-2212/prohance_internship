@@ -8,7 +8,10 @@
 .user-list-container {
     margin-top: 20px;
 }
-
+/* #company-name{
+    position: relative;
+    left: 5%;
+} */
 #user-table {
     width: 100%;
     border-collapse: collapse;
@@ -22,7 +25,10 @@
 
 #user-table th {
     background-color: #6dadf1;
+    position: relative;
+    z-index: -1;
 }
+
 
 .actions {
     display: flex;
@@ -39,7 +45,9 @@
     color: #fff;
     border: none;
     cursor: pointer;
-    margin-bottom: 10px; 
+    margin-bottom: 10px;
+    position: relative; 
+    z-index: -1;
 }
 
 #createUserButton:hover {

@@ -1,0 +1,58 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+  }
+ 
+  .sidebar {
+    position: fixed;
+    left: -250px;
+    width: 200px;
+    height: 100%;
+    background: #333;
+    /* padding-top: 60px; */
+    transition: left 0.3s ease;
+    z-index:9;
+  }
+  
+  .sidebar ul {
+    position: relative;
+    top: 5%;
+    list-style: none;
+    padding: 0;
+  }
+  
+  .sidebar ul li {
+    padding: 10px;
+  }
+  
+  .sidebar ul li a {
+    text-decoration: none;
+    color: white;
+  }
+  
+  .content {
+    transition: margin-left 0.3s;
+ 
+  }
+  
+  .open-btn {
+    position: relative;
+    top: 20px;
+    left: 20px;
+    z-index: 9999;
+  }
+  
+  
+  #close {
+    position: relative;
+    top: 5%;
+    left: 65%;
+    z-index: 9999; /* Ensure the element appears above other elements */
+    cursor: pointer; 
+}
+
+  #greeting{
+    position: relative;
+    z-index: -1;
+  }

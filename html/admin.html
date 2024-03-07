@@ -1,30 +1,49 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Panel</title>
+    <link rel="stylesheet" href="../css/samp.css">
     <link rel="stylesheet" href="../css/admin.css">
     <link rel="stylesheet" href="../css/navbar.css">
     <!-- SweetAlert2 CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10/dist/sweetalert2.min.css">
 
 </head>
+
 <body>
     <div class="cont1" style="position: fixed;">
-                <header class="navbar">
-        
-          <h1>ProHance</h1> <!-- Company name -->
- 
+        <header class="navbar">
+
+             <!-- Company name -->
+            
+              
+              
+            <h1 id="company-name">ProHance</h1> 
         </header>
-        
- </div>
+        <div class="content">
+            <button class="open-btn"><img src="/images/icons8-hamburger-menu-48.png" alt="menu-open" style="height: 20px;"></button>
+            
+            
+        </div>
+        <div class="sidebar">
+            <img src="/images/icons8-cancel-50.png" id="close" alt="menu-open" style="height: 30px;">
+            <ul>
+              <li><a href="./admin/adduser.html">Add User</a></li>
+              <li><a href="./admin/addserver.html">Add server</a></li>
+              <li><a href="./admin/edituser.html">Edit Customer</a></li>
+          
+            </ul>
+          </div>
+    </div>
     <div class="container">
-        <h1>Hello,Admin</h1>
-        
-         
-      
+        <h1 id="greeting">Hello,Admin</h1>
+
+
         <button id="createUserButton">Create User</button>
+        
         <div id="createUserForm" style="display: none;">
             <form id="createForm">
                 <input type="text" id="name" name="name" placeholder="Name" required>
@@ -69,7 +88,7 @@
             </table>
         </div>
     </div>
-
+    <script src="../js/samp.js"></script>
     <!-- SweetAlert2 JS -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <script>
@@ -89,32 +108,32 @@
                         fetch(`http://localhost:3000/users/${encodeURIComponent(email)}`, {
                             method: 'DELETE'
                         })
-                        .then(response => {
-                            if (!response.ok) {
-                                throw new Error('Network response was not ok');
-                            }
-                            return response.json();
-                        })
-                        .then(data => {
-                            // Remove the deleted user from the UI
-                            const userRow = document.getElementById(email + '-row');
-                            if (userRow) {
-                                userRow.remove();
-                            }
-                            Swal.fire(
-                                'Deleted!',
-                                'User has been deleted successfully.',
-                                'success'
-                            );
-                        })
-                        .catch(error => {
-                            console.error('Error:', error);
-                            Swal.fire(
-                                'Error!',
-                                'An error occurred while deleting user. Please try again later.',
-                                'error'
-                            );
-                        });
+                            .then(response => {
+                                if (!response.ok) {
+                                    throw new Error('Network response was not ok');
+                                }
+                                return response.json();
+                            })
+                            .then(data => {
+                                // Remove the deleted user from the UI
+                                const userRow = document.getElementById(email + '-row');
+                                if (userRow) {
+                                    userRow.remove();
+                                }
+                                Swal.fire(
+                                    'Deleted!',
+                                    'User has been deleted successfully.',
+                                    'success'
+                                );
+                            })
+                            .catch(error => {
+                                console.error('Error:', error);
+                                Swal.fire(
+                                    'Error!',
+                                    'An error occurred while deleting user. Please try again later.',
+                                    'error'
+                                );
+                            });
                     }
                 });
             }
@@ -157,7 +176,7 @@
 
                         const editButton = document.createElement('button');
                         editButton.textContent = 'Edit';
-                        editButton.classList.add('custom-button'); 
+                        editButton.classList.add('custom-button');
                         editButton.addEventListener('click', () => editUser(user));
                         actionCell.appendChild(editButton);
                         actionCell.appendChild(document.createTextNode('\u00A0'));
@@ -207,45 +226,46 @@
                         role: formData.get('role')
                     })
                 })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    // Update the user in the UI
-                    const userRow = document.getElementById(data.email + '-row');
-                    if (userRow) {
-                        const cells = userRow.getElementsByTagName('td');
-                        cells[0].textContent = data.name;
-                        cells[1].textContent = data.email;
-                        cells[2].textContent = data.role;
-                    }
-                    Swal.fire(
-                        'Updated!',
-                        'User has been updated successfully.',
-                        'success'
-                    ).then(() => {
-                        // Reload the page
-                        window.location.reload();
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        // Update the user in the UI
+                        const userRow = document.getElementById(data.email + '-row');
+                        if (userRow) {
+                            const cells = userRow.getElementsByTagName('td');
+                            cells[0].textContent = data.name;
+                            cells[1].textContent = data.email;
+                            cells[2].textContent = data.role;
+                        }
+                        Swal.fire(
+                            'Updated!',
+                            'User has been updated successfully.',
+                            'success'
+                        ).then(() => {
+                            // Reload the page
+                            window.location.reload();
+                        });
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        Swal.fire(
+                            'Error!',
+                            'An error occurred while updating user. Please try again later.',
+                            'error'
+                        );
                     });
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    Swal.fire(
-                        'Error!',
-                        'An error occurred while updating user. Please try again later.',
-                        'error'
-                    );
-                });
 
                 // Hide the edit user form after submission
                 document.getElementById('editUserForm').style.display = 'none';
             });
         });
     </script>
-    
-    <script src= "/js/admin.js"></script>
+
+    <script src="/js/admin.js"></script>
 </body>
+
 </html>
